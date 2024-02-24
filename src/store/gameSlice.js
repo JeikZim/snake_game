@@ -57,13 +57,15 @@ const gameSlice = createSlice({
             let randomY;
 
             do {
-                randomX = Math.round(Math.random() * state.boardSize.width - 1);
-                randomY = Math.round(Math.random() * state.boardSize.height - 1);  
+                randomX = Math.round(Math.random() * (state.boardSize.width - 1));
+                randomY = Math.round(Math.random() * (state.boardSize.height - 1));  
             } while (state.snake.positions.filter(el => el.x === randomX && el.y === randomY).length !== 0);
 
             state.eat.x = randomX;
             state.eat.y = randomY;
             state.eat.isOnBoard = true;
+
+            console.log(state.eat.x, state.eat.y);
         },
         takeEat(state, action) {
             state.eat.x = null;
