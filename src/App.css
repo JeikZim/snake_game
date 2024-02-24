@@ -1,38 +1,124 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  
+  min-height: 100vh;
+
   font-size: calc(10px + 2vmin);
+  text-align: center;
   color: white;
+
+  background-color: #282c34;
 }
 
-.App-link {
-  color: #61dafb;
+.display {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  height: 10vh;
+  width: 80vh;
+
+  margin-top: 3vh;
+
+  border: 5px solid #cfdbff80;
+  border-radius: 15px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.play-button {
+  box-sizing: border-box;
+  padding: 1.8vh 3.6vh;
+  
+  font-size: 28px;
+  color: #cfdbff80;
+  text-transform: capitalize;
+
+  border: 5px solid #cfdbff80;
+  border-radius: 10px;
+  background: #282c34;
+
+  transition: color, border 0.05s linear;
+  will-change: color, border;
+}
+
+.play-button:hover {
+  color: #cfdbff;
+  border: 5px solid #cfdbff;
+  background: #21242b;
+}
+
+.play-button.play:active {
+  color: #c52626;
+  border: 5px solid #c52626;
+}
+
+.play-button.pause:active {
+  color: #ffff28;
+  border: 5px solid #ffff28;
+}
+
+.play-button.resume:active {
+  color: #0cf200;
+  border: 5px solid #0cf200;
+}
+
+.board {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+
+  height: 80vh;
+  width: 80vh;
+}
+
+.cell {
+  height: 7.75vh;
+  width: 7.75vh;
+
+  margin: 0.125vh;
+
+  box-sizing: border-box;
+  border: 5px solid #cfdbff80;
+  border-radius: 10px;
+}
+
+.cell.snake {
+  background: #0cf200;
+  border-color:  #0cf200;
+}
+
+.cell.eat {
+  background: #c52626;
+  border-color:  #c52626;
+}
+
+.lose {
+  position: absolute;
+  top: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+
+  border: 5px solid #c52626cc;
+  border-radius: 10px;
+  background-color: #c5262687;
+}
+
+.lose.is-hidden {
+  display: none;
+}
+
+.lose span {
+  font-size: 72px;
+  font-weight: bold;
+  color: rgb(249, 237, 237);
 }
