@@ -11,10 +11,9 @@ function Board() {
     const boardSize = useSelector(store => store.game.boardSize);
     const isLose = useSelector(store => store.game.isLose);
 
-
     for (let y = 0; y < boardSize.height; y++) {
         for (let x = 0; x < boardSize.width; x++) {
-            cells.push({ x, y, key: Math.random() * 1000 })
+            cells.push({ x, y, key: x + "" + y })
         }
     }
 

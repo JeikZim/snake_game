@@ -10,8 +10,9 @@ const gameSlice = createSlice({
         },
         renderingInterval: null,
         snake: {
+            tmpDirection: null,
             direction: null,
-            positions: [],
+            positions: []
         },
         eat: {
             x: null,
@@ -33,21 +34,23 @@ const gameSlice = createSlice({
                     ? "pause"
                     : "#Error#";
         },
-        setRenderingInterval(state, aciton) {
-            state.renderingInterval = aciton.payload;
+        setRenderingInterval(state, action) {
+            state.renderingInterval = action.payload;
         },
-        startGame(state, aciton) {
+        startGame(state, action) {
             clearInterval(state.renderingInterval);
             state.shouldGrow = false;
             state.isLose = false;
             
             state.snake.positions = [];
             state.snake.direction = "up";
+            state.snake.tmpDirection = "up";
 
             state.eat.isOnBoard = false;
             state.eat.x = null;
             state.eat.y = null;
 
+            // x,y --- "центр" экрана 10x10
             state.snake.positions.push({ x: 5, y: 5 });
         },
         createEat(state, action) {
@@ -59,7 +62,7 @@ const gameSlice = createSlice({
             do {
                 randomX = Math.round(Math.random() * (state.boardSize.width - 1));
                 randomY = Math.round(Math.random() * (state.boardSize.height - 1));  
-            } while (state.snake.positions.filter(el => el.x === randomX && el.y === randomY).length !== 0);
+            } while (state.snake.positions.some((el) => el.x === randomX && el.y === randomY));
 
             state.eat.x = randomX;
             state.eat.y = randomY;
@@ -112,10 +115,19 @@ const gameSlice = createSlice({
                 if (state.snake.direction === "right" && direction === "left") return;
             }
 
-            state.snake.direction = direction;
+            state.snake.tmpDirection = direction;
         },
         moveSnake(state, action) {
             if (state.isLose) return;
+
+            if (state.snake.positions.length > 1) {
+                if (state.snake.direction === "up" && state.snake.tmpDirection === "down") return;
+                if (state.snake.direction === "down" && state.snake.tmpDirection === "up") return;
+                if (state.snake.direction === "left" && state.snake.tmpDirection === "right") return;
+                if (state.snake.direction === "right" && state.snake.tmpDirection === "left") return;
+            }
+
+            state.snake.direction = state.snake.tmpDirection
 
             const direction = state.snake.direction;
             const positions = state.snake.positions;
@@ -131,7 +143,7 @@ const gameSlice = createSlice({
 
                     newCell = { x: headPosition.x, y: headPosition.y - 1 };
 
-                    if (positions.filter(el => el.x === newCell.x && el.y === newCell.y).length !== 0) {
+                    if (positions.some(el => el.x === newCell.x && el.y === newCell.y)) {
                         state.isLose = true;
                         return;
                     }
@@ -149,7 +161,7 @@ const gameSlice = createSlice({
 
                     newCell = { x: headPosition.x, y: headPosition.y + 1 };
 
-                    if (positions.filter(el => el.x === newCell.x && el.y === newCell.y).length !== 0) {
+                    if (positions.some(el => el.x === newCell.x && el.y === newCell.y)) {
                         state.isLose = true;
                         return;
                     }
@@ -167,7 +179,7 @@ const gameSlice = createSlice({
 
                     newCell = { x: headPosition.x - 1, y: headPosition.y };
 
-                    if (positions.filter(el => el.x === newCell.x && el.y === newCell.y).length !== 0) {
+                    if (positions.some(el => el.x === newCell.x && el.y === newCell.y)) {
                         state.isLose = true;
                         return;
                     }
@@ -185,7 +197,7 @@ const gameSlice = createSlice({
 
                     newCell = { x: headPosition.x + 1, y: headPosition.y };
 
-                    if (positions.filter(el => el.x === newCell.x && el.y === newCell.y).length !== 0) {
+                    if (positions.some(el => el.x === newCell.x && el.y === newCell.y)) {
                         state.isLose = true;
                         return;
                     }
